@@ -10,7 +10,8 @@ app.get('/', function(req, res) {
 });
 
 // static file support
-app.use(express.static(path.join(__dirname, '/public')));
+app.use("/public", express.static('./public/'));
+
 
 app.listen(port);
 console.log('Server started at http://localhost:' + port);
