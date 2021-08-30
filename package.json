@@ -1,0 +1,22 @@
+{
+  "name": "notes_example",
+  "version": "1.0.0",
+  "description": "a simple note app",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sametkamgul/notes.git"
+  },
+  "keywords": [
+    "notes"
+  ],
+  "author": "Samet Kamgul",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sametkamgul/notes/issues"
+  },
+  "homepage": "https://github.com/sametkamgul/notes#readme"
+}
