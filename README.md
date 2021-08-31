@@ -1,3 +1,6 @@
+[![Build Status](https://app.travis-ci.com/sametkamgul/notes.svg?branch=main)](https://app.travis-ci.com/sametkamgul/notes)
+[![Coverage Status](https://coveralls.io/repos/github/sametkamgul/notes/badge.svg?branch=main)](https://coveralls.io/github/sametkamgul/notes?branch=main)
+
 # notes
 is a simple html/javascript/css application
 
