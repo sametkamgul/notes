@@ -56,7 +56,6 @@ body {
 .task-list {
     list-style: none;
     min-width: 40%;
-    /* background-color: rebeccapurple; */
 }
 
 .task-item {
@@ -66,6 +65,7 @@ body {
     margin: .5rem;
     font-size: 1.2rem;
     background-color: white;
+    transition: 0.4s ease-in-out;
 }
 
 .task-definition {
@@ -89,4 +89,12 @@ body {
 .task-done {
     text-decoration: line-through;
     opacity: .5;
+}
+
+.fas {
+    pointer-events: none;
+}
+
+.deleting-now {
+    transform: scale(0);
 }

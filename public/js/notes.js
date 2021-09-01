@@ -1,57 +1,81 @@
-console.log("hello world!!!");
+console.log('hello world!!!');
 
-const inputNote = document.querySelector(".input-note");
-const taskList = document.querySelector(".task-list");
+const inputNote = document.querySelector('.input-note');
+const taskList = document.querySelector('.task-list');
 
 const addTaskButton = document
-    .querySelector(".btn-add-task")
-    .addEventListener("click", function (e) {
-        console.log("clicked to the button");
-        if (inputNote.value === "") {
-            alert("Please enter a value");
-        } else {
-            const taskBtnDone = document.createElement("button");
-            const taskBtnDelete = document.createElement("button");
-            const taskItem = document.createElement("div");
-            const taskDefiniton = document.createElement("li");
+    .querySelector('.btn-add-task')
+    .addEventListener('click', addTask);
 
-            // defining buttons
-            taskBtnDone.classList.add("task-btn", "task-btn-done");
-            taskBtnDelete.classList.add("task-btn", "task-btn-delete");
+function addTask(e) {
+    if (/^ *$/.test(inputNote.value)) {     // regex check for null or only-space-char strings
+        alert('Please enter a value');
+    } else {
+        const taskBtnDone = document.createElement('button');
+        const taskBtnDelete = document.createElement('button');
+        const taskItem = document.createElement('div');
+        const taskDefiniton = document.createElement('li');
 
-            // adding i element to parent button element, for done and delete button
-            taskBtnDone.innerHTML = '<i class="fas fa-check-square"></i>';
-            taskBtnDelete.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        // defining buttons
+        taskBtnDone.classList.add('task-btn', 'task-btn-done');
+        taskBtnDelete.classList.add('task-btn', 'task-btn-delete');
 
-            // defining task-definition
-            taskDefiniton.className = "task-definition";
+        // adding i element to parent button element, for done and delete button
+        taskBtnDone.innerHTML = "<i class='fas fa-check-square'></i>";
+        taskBtnDelete.innerHTML = "<i class='fas fa-trash-alt'></i>";
 
-            // defining task-item
-            taskItem.className = "task-item";
+        // defining task-definition
+        taskDefiniton.className = 'task-definition';
 
-            // adding li element to parent div element
-            taskDefiniton.textContent = inputNote.value;
-            taskItem.appendChild(taskDefiniton);
+        // defining task-item
+        taskItem.className = 'task-item';
 
-            // adding done button to parent div element
-            taskItem.appendChild(taskBtnDone);
+        // adding li element to parent div element
+        taskDefiniton.textContent = inputNote.value;
+        taskItem.appendChild(taskDefiniton);
 
-            // adding delete button to parent div element
-            taskItem.appendChild(taskBtnDelete);
+        // adding done button to parent div element
+        taskItem.appendChild(taskBtnDone);
 
-            taskList.appendChild(taskItem);
+        // adding delete button to parent div element
+        taskItem.appendChild(taskBtnDelete);
 
-            // clear input field
-            inputNote.value = "";
+        taskList.appendChild(taskItem);
 
-            taskBtnDone.addEventListener("click", function (params) {
-                console.log("clicked to done");
-                taskItem.classList.toggle("task-done");
-            });
+        // saving item to the local storage
+        saveToLocalStorage(inputNote.value);
 
-            taskBtnDelete.addEventListener("click", function (params) {
-                console.log("clicked to delete");
-                taskItem.remove();
-            });
+        // clear input field
+        inputNote.value = '';
+
+        taskBtnDone.addEventListener('click', buttonAction);
+        taskBtnDelete.addEventListener('click', buttonAction);
+
+        // common function for item button events
+        function buttonAction(e) {
+            console.log(e.target);
+            if (e.target.classList.contains('task-btn-done')) {
+                taskItem.classList.toggle('task-done');
+            } else if (e.target.classList.contains('task-btn-delete')) {
+                e.target.parentElement.classList.toggle('deleting-now') // adding dissappearing effect
+                
+                // transitionend event is used for triggering remove method down below in the callback function
+                e.target.parentElement.addEventListener('transitionend', function () {
+                    taskItem.remove(); 
+                });
+            }
         }
-    });
+    }
+}
+
+function saveToLocalStorage(newTask) {
+    let tasks;
+    if(localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+    tasks.push(newTask);
+    console.log(tasks);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
