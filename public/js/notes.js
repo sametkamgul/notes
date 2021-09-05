@@ -119,3 +119,4 @@ function getArrayFromStorage() {
 }
 
 // TODO: bug fix for first run: the app refresh the screen
+// TODO: add a done flag to the JSON data in the local storage for done-tasks
