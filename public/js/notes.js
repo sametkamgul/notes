@@ -28,7 +28,7 @@ function addTask(e) {
 function buttonAction(e) {
     // console.log(e.target);
     if (e.target.classList.contains('task-btn-done')) {
-        this.classList.toggle('task-done');
+        this.parentElement.classList.toggle('task-done');
     } else if (e.target.classList.contains('task-btn-delete')) {
         e.target.parentElement.classList.toggle('deleting-now')     // adding dissappearing effect
         e.target.parentElement.addEventListener('transitionend', function () {      // transitionend event is used for triggering remove method down below in the callback function
