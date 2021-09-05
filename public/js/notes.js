@@ -1,17 +1,16 @@
 console.log('app is started...');
 const inputNote = document.querySelector('.input-note');
 const taskList = document.querySelector('.task-list');
+const addTaskButton = document
+    .querySelector('.btn-add-task')
+    .addEventListener('click', addTask);        // add task button on html
 
 readFromLocalStorage();     //reading elements from local storage
 
-// add task button on html
-const addTaskButton = document
-    .querySelector('.btn-add-task')
-    .addEventListener('click', addTask);
 
 // adds task
 function addTask(e) {
-    if (/^ *$/.test(inputNote.value)) {     // regex check for null or only-space-char strings
+    if (/^ *$/.test(inputNote.value)) {         // regex check for null or only-space-char strings
         alert('Please enter a value');
     } else {
         if(isTaskExisted(inputNote.value) === true) {
@@ -26,13 +25,14 @@ function addTask(e) {
 
 //common function for item button events
 function buttonAction(e) {
-    // console.log(e.target);
     if (e.target.classList.contains('task-btn-done')) {
         this.parentElement.classList.toggle('task-done');
     } else if (e.target.classList.contains('task-btn-delete')) {
         e.target.parentElement.classList.toggle('deleting-now')     // adding dissappearing effect
         e.target.parentElement.addEventListener('transitionend', function () {      // transitionend event is used for triggering remove method down below in the callback function
-            this.remove(); 
+            let taskToBeDeleted = this.querySelector('.task-definition').textContent;
+            deleteFromLocalStorage(taskToBeDeleted);
+            this.remove();
         });
     }
 }
@@ -47,7 +47,13 @@ function saveToLocalStorage(newTask) {
 // deletes tasks from local storage
 function deleteFromLocalStorage(taskToBeDeleted) {
     //TODO: behavioral implementation
-
+    let tasks = getArrayFromStorage();
+    tasks.filter(currentTask => {
+        if (currentTask === taskToBeDeleted) {
+            tasks.splice(tasks.indexOf(currentTask), 1);        // remove element from array by index
+        }
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 // inits a task. DOM operations are handled here
