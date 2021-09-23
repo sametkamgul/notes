@@ -5,8 +5,14 @@ const addTaskButton = document
     .querySelector('.btn-add-task')
     .addEventListener('click', addTask);        // add task button on html
 
+    
+// task status enum
+const TaskStatus = {
+    done: 'DONE',
+    todo: 'TODO'
+};
+    
 readFromLocalStorage();     //reading elements from local storage
-
 
 // adds task
 function addTask(e) {
@@ -16,17 +22,39 @@ function addTask(e) {
         if(isTaskExisted(inputNote.value) === true) {
             alert('Task is already added!');        // dont save the task. it is already added
         } else {
-            initializeTask(inputNote.value);        // initialization a new task
-            saveToLocalStorage(inputNote.value);        // saving task to the local storage
+            var task = {task:inputNote.value, status:TaskStatus.todo};      // creating new task in right form
+            initializeTask(task);        // initialization a new task
+            saveToLocalStorage(task);        // saving task to the local storage
         }
         inputNote.value = '';       // clear input field
     }
+}
+
+// update task status
+function updateTask(e) {
+    var tasks = getArrayFromStorage();
+    console.log('task', e);
+    tasks.filter(taskElement => {       // TODO: refactor here with find() method instead of filter
+        if(taskElement.task === e) {
+            console.log('found', taskElement);
+            if (taskElement.status === TaskStatus.todo) {
+                taskElement.status = TaskStatus.done;       // toggle the task status
+            } else if (taskElement.status === TaskStatus.done ){
+                taskElement.status = TaskStatus.todo;       // toggle the task status
+                console.log("updated");
+            }
+        }
+    });
+    console.log(tasks);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 //common function for item button events
 function buttonAction(e) {
     if (e.target.classList.contains('task-btn-done')) {
         this.parentElement.classList.toggle('task-done');
+        var taskToBeUpdated = this.parentElement.querySelector('.task-definition').textContent;
+        updateTask(taskToBeUpdated);
     } else if (e.target.classList.contains('task-btn-delete')) {
         e.target.parentElement.classList.toggle('deleting-now')     // adding dissappearing effect
         e.target.parentElement.addEventListener('transitionend', function () {      // transitionend event is used for triggering remove method down below in the callback function
@@ -40,7 +68,9 @@ function buttonAction(e) {
 // saves tasks to the local storage. user can see after the closing/opening browser
 function saveToLocalStorage(newTask) {
     let tasks = getArrayFromStorage();      // get data from storage
-    tasks.push(newTask);
+    const task = {task:newTask.task, status:newTask.status};
+    tasks.push(task);
+    console.log('saving', task);
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
@@ -49,7 +79,7 @@ function deleteFromLocalStorage(taskToBeDeleted) {
     //TODO: behavioral implementation
     let tasks = getArrayFromStorage();
     tasks.filter(currentTask => {
-        if (currentTask === taskToBeDeleted) {
+        if (currentTask.task === taskToBeDeleted) {
             tasks.splice(tasks.indexOf(currentTask), 1);        // remove element from array by index
         }
     });
@@ -76,9 +106,11 @@ function initializeTask(taskToBeIntialized) {
     taskItem.className = 'task-item';       // defining task-item
 
     // adding li element to parent div element
-    taskDefiniton.textContent = taskToBeIntialized;
+    taskDefiniton.textContent = taskToBeIntialized.task;
+    if (taskToBeIntialized.status == TaskStatus.done) {
+        taskItem.classList.add('task-done');
+    }
     taskItem.appendChild(taskDefiniton);
-
     taskItem.appendChild(taskBtnDone);      // adding done button to parent div element    
     taskItem.appendChild(taskBtnDelete);        // adding delete button to parent div element
     taskList.appendChild(taskItem);
@@ -89,8 +121,8 @@ function initializeTask(taskToBeIntialized) {
 // reads from local storage and showing tasks in the UI
 function readFromLocalStorage() {
     let tasks = getArrayFromStorage();      // get data from storage
-    tasks.forEach(function (task) {
-        initializeTask(task);        
+    tasks.forEach(function (taskElement) {
+        initializeTask(taskElement);        
     });
 }
 
@@ -120,3 +152,4 @@ function getArrayFromStorage() {
 
 // TODO: bug fix for first run: the app refresh the screen
 // TODO: add a done flag to the JSON data in the local storage for done-tasks
+// TODO: move app to the aws elastic beanstalk free tier service(AWS EBS)
