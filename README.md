@@ -4,10 +4,6 @@
 Notes is an HTML/JavaScript/CSS client-side based simple TODO application.
 Node.js is used for serving `notes.html` file
 
-## deployment
-Heroku, free tier is used for deployment.
-[check it out](https://simple-notes-app-sametkamgul.herokuapp.com)
-
 ## how to use it?
 You can use to store your TODO list in your browser. I'm aware it is a very simple application. But, in the process of learning and developing it was a big journey and excitement for me. If you can review the codes and feedback to me, I will be appreciated. My main motivation is to use the knowledge I stored in my brain's synapses. I used HTML, basic usage (copy-paste from tutorial) of CSS and JavaScript. I try to write my JavaScript code.
 
